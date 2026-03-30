@@ -53,7 +53,7 @@ async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     outputs = []
 
-    for i in range(3):
+for i in range(3):
     prefix = random.choice(["IMG", "VID", "DSC"])
     timestamp = int(time.time())
     out = f"{prefix}_{timestamp}{random.randint(10,99)}.MP4"
