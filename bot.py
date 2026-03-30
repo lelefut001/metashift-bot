@@ -52,7 +52,7 @@ async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await msg.reply_text("⚡ Generating 3 versions...")
 
-            outputs = []
+    outputs = []
 
     for i in range(3):
         prefix = random.choice(["IMG", "VID", "DSC"])
