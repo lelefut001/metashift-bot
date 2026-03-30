@@ -21,7 +21,13 @@ ALLOWED_USERS = {6528488774}
 FFMPEG = "ffmpeg"
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("🔥 Bot attivo! Mandami un video")
+    await update.message.reply_text(
+    "🚀 MetaShiftGG\n\n"
+    "Generate 3 unique, ready-to-post video versions instantly.\n\n"
+    "⚡ Fast\n"
+    "🎯 Optimized\n"
+    "🔒 Private"
+)
 
 async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.effective_user.id not in ALLOWED_USERS:
