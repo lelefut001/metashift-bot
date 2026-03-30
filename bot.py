@@ -15,7 +15,7 @@ def run_cmd(cmd):
 def rand(a, b):
     return round(random.uniform(a, b), 3)
 
-TOKEN = "8236374381:AAFTWoQO-5UbDMm01X2RieToXJ5Z9jnoliQ"
+TOKEN = "8236374381:AAHp-OajB6V6JrHO2FiCnmOniI4dYK7-aIA"
 
 ALLOWED_USERS = {6528488774}
 
