@@ -51,39 +51,39 @@ async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await msg.reply_text("⚡ Generating 3 versions...")
 
-    outputs = []
+        outputs = []
 
-for i in range(3):
-    prefix = random.choice(["IMG", "VID", "DSC"])
-    timestamp = int(time.time())
-    out = f"{prefix}_{timestamp}{random.randint(10,99)}.MP4"
-    
-    zoom = rand(1.01, 1.05)
-    contrast = rand(0.95, 1.08)
-    brightness = rand(-0.02, 0.02)
-    saturation = rand(0.95, 1.08)
-    crf = random.randint(22, 28)
-    start = rand(0.0, 0.8)
+    for i in range(3):
+        prefix = random.choice(["IMG", "VID", "DSC"])
+        timestamp = int(time.time())
+        out = f"{prefix}_{timestamp}{random.randint(10,99)}.MP4"
 
-    vf = (
-        f"scale=iw*{zoom}:ih*{zoom},crop=iw:ih,"
-        f"eq=contrast={contrast}:brightness={brightness},"
-        f"hue=s={saturation}"
-    )
+        zoom = rand(1.01, 1.05)
+        contrast = rand(0.95, 1.08)
+        brightness = rand(-0.02, 0.02)
+        saturation = rand(0.95, 1.08)
+        crf = random.randint(22, 28)
+        start = rand(0.0, 0.8)
 
-    cmd = [
-        FFMPEG, "-y",
-        "-ss", str(start),
-        "-i", input_path,
-        "-vf", vf,
-        "-c:v", "libx264",
-        "-crf", str(crf),
-        "-c:a", "aac",
-        out
-    ]
+        vf = (
+            f"scale=iw*{zoom}:ih*{zoom},crop=iw:ih,"
+            f"eq=contrast={contrast}:brightness={brightness},"
+            f"hue=s={saturation}"
+        )
 
-    run_cmd(cmd)
-    outputs.append(out)
+        cmd = [
+            FFMPEG, "-y",
+            "-ss", str(start),
+            "-i", input_path,
+            "-vf", vf,
+            "-c:v", "libx264",
+            "-crf", str(crf),
+            "-c:a", "aac",
+            out
+        ]
+
+        run_cmd(cmd)
+        outputs.append(out)
 
     for out in outputs:
         await msg.reply_video(video=open(out, "rb"))
