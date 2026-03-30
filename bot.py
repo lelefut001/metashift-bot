@@ -26,7 +26,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     "🚀 MetaShiftGG\n\n"
     "⚡ Fast\n"
     "🎯 Optimized\n"
-    "🔒 Private"
+    "🔒 Private\n\n"
         
     "📤 Send Video for Generate 3 unique, ready-to-post video versions instantly.\n\n"
 )
