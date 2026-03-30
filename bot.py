@@ -4,6 +4,7 @@ from telegram import Update
 from telegram.ext import ApplicationBuilder, MessageHandler, filters, ContextTypes, CommandHandler
 import random
 import uuid
+import time
 
 def run_cmd(cmd):
     res = subprocess.run(cmd, capture_output=True, text=True)
@@ -56,7 +57,7 @@ async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
     prefix = random.choice(["IMG", "VID", "DSC"])
     timestamp = int(time.time())
     out = f"{prefix}_{timestamp}{random.randint(10,99)}.MP4"
-
+    
     zoom = rand(1.01, 1.05)
     contrast = rand(0.95, 1.08)
     brightness = rand(-0.02, 0.02)
