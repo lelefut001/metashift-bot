@@ -17,6 +17,7 @@ def rand(a, b):
 
 import os
 TOKEN = os.getenv("TOKEN")
+print("TOKEN:", TOKEN)
 
 ALLOWED_USERS = {6528488774}
 
@@ -51,7 +52,7 @@ async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await msg.reply_text("⚡ Generating 3 versions...")
 
-        outputs = []
+            outputs = []
 
     for i in range(3):
         prefix = random.choice(["IMG", "VID", "DSC"])
@@ -91,7 +92,7 @@ async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
     os.remove(input_path)
     for out in outputs:
         os.remove(out)
-
+        
 app = ApplicationBuilder().token(TOKEN).build()
 
 app.add_handler(CommandHandler("start", start))
