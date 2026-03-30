@@ -18,7 +18,7 @@ TOKEN = "8236374381:AAFTWoQO-5UbDMm01X2RieToXJ5Z9jnoliQ"
 
 ALLOWED_USERS = {6528488774}
 
-FFMPEG = "./ffmpeg.exe"
+FFMPEG = "ffmpeg"
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("🔥 Bot attivo! Mandami un video")
