@@ -23,10 +23,11 @@ FFMPEG = "ffmpeg"
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
     "🚀 MetaShiftGG\n\n"
-    "Generate 3 unique, ready-to-post video versions instantly.\n\n"
     "⚡ Fast\n"
     "🎯 Optimized\n"
     "🔒 Private"
+        
+    "📤 Send Video for Generate 3 unique, ready-to-post video versions instantly.\n\n"
 )
 
 async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
