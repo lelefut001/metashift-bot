@@ -15,7 +15,8 @@ def run_cmd(cmd):
 def rand(a, b):
     return round(random.uniform(a, b), 3)
 
-TOKEN = "8236374381:AAHp-OajB6V6JrHO2FiCnmOniI4dYK7-aIA"
+import os
+TOKEN = os.getenv("TOKEN")
 
 ALLOWED_USERS = {6528488774}
 
@@ -26,8 +27,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     "🚀 MetaShiftGG\n\n"
     "⚡ Fast\n"
     "🎯 Optimized\n"
-    "🔒 Private\n\n"
-        
+    "🔒 Private\n\n" 
     "📤 Send Video for Generate 3 unique, ready-to-post video versions instantly.\n\n"
 )
 
