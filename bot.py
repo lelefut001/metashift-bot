@@ -69,7 +69,8 @@ async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
         vf = (
             f"scale=iw*{zoom}:ih*{zoom},crop=iw:ih,"
             f"eq=contrast={contrast}:brightness={brightness},"
-            f"hue=s={saturation}"
+            f"hue=s={saturation},"
+            f"noise=alls={random.randint(5,12)}:allf=t"
         )
 
         cmd = [
@@ -77,6 +78,10 @@ async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "-ss", str(start),
             "-i", input_path,
             "-vf", vf,
+            "-af", f"volume={rand(0.98,1.02)}",
+            "-r", str(random.randint(29,31)),
+            "-metadata", f"title={uuid.uuid4()}",
+            "-metadata", f"encoder={random.randint(1000,9999)}",
             "-c:v", "libx264",
             "-crf", str(crf),
             "-c:a", "aac",
