@@ -85,7 +85,7 @@ async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "-metadata", f"title={uuid.uuid4()}",
             "-metadata", f"encoder={random.randint(1000,9999)}",
             "-c:v", "libx264",
-            "-preset", "medium",
+            "-preset", "veryfast",
             "-crf", str(crf),
             "-b:v", "3000k",
             "-maxrate", "4000k",
