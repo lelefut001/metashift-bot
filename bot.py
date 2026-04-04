@@ -61,16 +61,18 @@ async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         zoom = rand(1.01, 1.05)
         contrast = rand(0.95, 1.08)
-        brightness = rand(-0.02, 0.02)
+        brightness = rand(-0.01, 0.01)
         saturation = rand(0.95, 1.08)
-        crf = random.randint(22, 28)
+        crf = random.randint(17, 21)
         start = rand(0.0, 0.8)
 
         vf = (
-            f"scale=iw*{zoom}:ih*{zoom},crop=iw:ih,"
-            f"eq=contrast={contrast}:brightness={brightness},"
-            f"hue=s={saturation},"
-            f"noise=alls={random.randint(5,12)}:allf=t"
+             f"scale=1080:1920:force_original_aspect_ratio=increase,"
+             f"crop=1080:1920,"
+             f"eq=contrast={contrast}:brightness={brightness},"
+             f"hue=s={saturation},"
+             f"noise=alls={random.randint(2,5)}:allf=t,"
+             f"unsharp=5:5:0.5:5:5:0.0"
         )
 
         cmd = [
@@ -79,12 +81,19 @@ async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "-i", input_path,
             "-vf", vf,
             "-af", f"volume={rand(0.98,1.02)}",
-            "-r", str(random.randint(29,31)),
+            "-r", "30", str(random.randint(29,31)),
             "-metadata", f"title={uuid.uuid4()}",
             "-metadata", f"encoder={random.randint(1000,9999)}",
             "-c:v", "libx264",
+            "-preset", "medium",
             "-crf", str(crf),
+            "-b:v", "3000k",
+            "-maxrate", "4000k",
+            "-bufsize", "8000k",
+
             "-c:a", "aac",
+            "-b:a", "128k",
+
             out
         ]
 
