@@ -72,14 +72,14 @@ async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
         start = rand(0.0, 0.8)
 
         vf = (
-            f"scale=720:1280:force_original_aspect_ratio=increase,"
-            f"crop=720:1280,"
+            f"scale=720:-2,"
             f"eq=contrast={contrast}:brightness={brightness},"
             f"hue=s={saturation}"
-)
+        )
 
         cmd = [
             FFMPEG, "-y",
+            "-loglevel", "error",
             "-ss", str(start),
             "-i", input_path,
             "-vf", vf,
@@ -97,19 +97,14 @@ async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
             out
         ]
 
+        print("START", i)
         ok = run_cmd(cmd)
+        print("END", i, ok)
         if ok:
             outputs.append(out)
         else:
             print("Qualcosa è andato storto, Riprova")
-            
-        for out in outputs:
-            try:
-                with open(out, "rb") as f:
-                    await msg.reply_video(video=f)
-            except Exception as e:
-                print("Errore invio:", e) 
-            
+        
         try:
             os.remove(input_path)
         except:
@@ -120,7 +115,13 @@ async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 os.remove(out)
             except:
                 pass
-        
+        for out in outputs:
+            try:
+                with open(out, "rb") as f:
+                    await msg.reply_video(video=f)
+            except Exception as e:
+                print("Errore invio:", e) 
+            
 app = ApplicationBuilder().token(TOKEN).build()
 
 app.add_handler(CommandHandler("start", start))
