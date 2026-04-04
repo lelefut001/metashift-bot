@@ -105,23 +105,27 @@ async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
             outputs.append(out)
         else:
             print("Qualcosa è andato storto, Riprova")
-        
+
+            # INVIO VIDEO
+    for out in outputs:
         try:
-            os.remove(input_path)
+            with open(out, "rb") as f:
+                await msg.reply_video(video=f)
+        except Exception as e:
+            print("Errore invio:", e)
+
+    # CANCELLA OUTPUT
+    for out in outputs:
+        try:
+            os.remove(out)
         except:
             pass
 
-        for out in outputs:
-            try:
-                os.remove(out)
-            except:
-                pass
-        for out in outputs:
-            try:
-                with open(out, "rb") as f:
-                    await msg.reply_video(video=f)
-            except Exception as e:
-                print("Errore invio:", e) 
+    # CANCELLA INPUT
+    try:
+        os.remove(input_path)
+    except:
+        pass
             
 app = ApplicationBuilder().token(TOKEN).build()
 
