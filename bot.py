@@ -102,6 +102,7 @@ async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
             outputs.append(out)
         else:
             print("Qualcosa è andato storto, Riprova")
+            
         for out in outputs:
             try:
                 with open(out, "rb") as f:
