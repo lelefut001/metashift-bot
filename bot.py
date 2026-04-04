@@ -71,11 +71,12 @@ async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
         crf = random.randint(17, 21)
         start = rand(0.0, 0.8)
 
-       vf = (
-           f"scale=720:1280,"
-           f"eq=contrast={contrast}:brightness={brightness},"
-           f"hue=s={saturation}"
-       )
+        vf = (
+            f"scale=720:1280:force_original_aspect_ratio=increase,"
+            f"crop=720:1280,"
+            f"eq=contrast={contrast}:brightness={brightness},"
+            f"hue=s={saturation}"
+)
 
         cmd = [
             FFMPEG, "-y",
@@ -103,14 +104,18 @@ async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if ok:
             outputs.append(out)
         else:
-            print("Errore generazione video")
+            print("Qualcosa è andato storto, Riprova")
             
-        for out in outputs:
-            await msg.reply_video(video=open(out, "rb"))
+        try:
+            os.remove(input_path)
+        except:
+            pass
 
-    os.remove(input_path)
-    for out in outputs:
-        os.remove(out)
+        for out in outputs:
+            try:
+                os.remove(out)
+            except:
+                pass
         
 app = ApplicationBuilder().token(TOKEN).build()
 
