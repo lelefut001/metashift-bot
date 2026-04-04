@@ -7,10 +7,15 @@ import uuid
 import time
 
 def run_cmd(cmd):
-    res = subprocess.run(cmd, capture_output=True, text=True)
-    if res.returncode != 0:
-        print("FFMPEG ERROR:\n", res.stderr)
-        raise RuntimeError("ffmpeg failed")
+    try:
+        res = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
+        if res.returncode != 0:
+            print("FFMPEG ERROR:\n", res.stderr)
+            return False
+        return True
+    except subprocess.TimeoutExpired:
+        print("FFMPEG TIMEOUT")
+        return False
 
 def rand(a, b):
     return round(random.uniform(a, b), 3)
@@ -26,10 +31,10 @@ FFMPEG = "ffmpeg"
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
     "🚀 MetaShiftGG\n\n"
-    "⚡ Fast\n"
-    "🎯 Optimized\n"
-    "🔒 Private\n\n" 
-    "📤 Send Video for Generate 3 unique, ready-to-post video versions instantly.\n\n"
+    "⚡ Veloce\n"
+    "🎯 Ottimizzato\n"
+    "🔒 Uso Privato\n\n" 
+    "📤 Manda un video per generarne 3 diversi, all'istante.\n\n"
 )
 
 async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -50,7 +55,7 @@ async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
     input_path = f"input_{uid}.mp4"
     await file.download_to_drive(input_path)
 
-    await msg.reply_text("⚡ Generating 3 versions...")
+    await msg.reply_text("Genero 3 versioni differenti...⚡⌛")
 
     outputs = []
 
@@ -66,14 +71,11 @@ async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
         crf = random.randint(17, 21)
         start = rand(0.0, 0.8)
 
-        vf = (
-             f"scale=1080:1920:force_original_aspect_ratio=increase,"
-             f"crop=1080:1920,"
-             f"eq=contrast={contrast}:brightness={brightness},"
-             f"hue=s={saturation},"
-             f"noise=alls={random.randint(2,5)}:allf=t,"
-             f"unsharp=5:5:0.5:5:5:0.0"
-        )
+       vf = (
+           f"scale=720:1280,"
+           f"eq=contrast={contrast}:brightness={brightness},"
+           f"hue=s={saturation}"
+       )
 
         cmd = [
             FFMPEG, "-y",
@@ -81,7 +83,7 @@ async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "-i", input_path,
             "-vf", vf,
             "-af", f"volume={rand(0.98,1.02)}",
-            "-r", "30", str(random.randint(29,31)),
+            "-r", "30",
             "-metadata", f"title={uuid.uuid4()}",
             "-metadata", f"encoder={random.randint(1000,9999)}",
             "-c:v", "libx264",
@@ -97,11 +99,14 @@ async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
             out
         ]
 
-        run_cmd(cmd)
-        outputs.append(out)
-
-    for out in outputs:
-        await msg.reply_video(video=open(out, "rb"))
+        ok = run_cmd(cmd)
+        if ok:
+            outputs.append(out)
+        else:
+            print("Errore generazione video")
+            
+        for out in outputs:
+            await msg.reply_video(video=open(out, "rb"))
 
     os.remove(input_path)
     for out in outputs:
