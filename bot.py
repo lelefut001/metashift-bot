@@ -107,7 +107,7 @@ async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 with open(out, "rb") as f:
                     await msg.reply_video(video=f)
             except Exception as e:
-                print("Errore invio:", e)    
+                print("Errore invio:", e) 
             
         try:
             os.remove(input_path)
