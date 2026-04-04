@@ -90,9 +90,6 @@ async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "-c:v", "libx264",
             "-preset", "veryfast",
             "-crf", str(crf),
-            "-b:v", "3000k",
-            "-maxrate", "4000k",
-            "-bufsize", "8000k",
 
             "-c:a", "aac",
             "-b:a", "128k",
@@ -105,6 +102,12 @@ async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
             outputs.append(out)
         else:
             print("Qualcosa è andato storto, Riprova")
+        for out in outputs:
+            try:
+                with open(out, "rb") as f:
+                    await msg.reply_video(video=f)
+            except Exception as e:
+                print("Errore invio:", e)    
             
         try:
             os.remove(input_path)
