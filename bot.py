@@ -80,23 +80,24 @@ async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
         cmd = [
             FFMPEG, "-y",
             "-loglevel", "error",
-            "-ss", str(start),
+
             "-i", input_path,
+            "-ss", str(start),
+
             "-vf", vf,
-            "-af", f"volume={rand(0.98,1.02)}",
             "-r", "30",
-            "-metadata", f"title={uuid.uuid4()}",
-            "-metadata", f"encoder={random.randint(1000,9999)}",
+
             "-c:v", "libx264",
             "-preset", "veryfast",
-            "-crf", str(crf),
+            "-crf", "20",
+            "-pix_fmt", "yuv420p",
 
             "-c:a", "aac",
             "-b:a", "128k",
+            "-shortest",
 
             out
         ]
-
         print("START", i)
         ok = run_cmd(cmd)
         print("END", i, ok)
