@@ -5,6 +5,7 @@ from telegram.ext import ApplicationBuilder, MessageHandler, filters, ContextTyp
 import random
 import uuid
 import time
+from concurrent.futures import ThreadPoolExecutor
 
 def run_cmd(cmd):
     try:
@@ -27,6 +28,7 @@ print("TOKEN:", TOKEN)
 ALLOWED_USERS = {6528488774}
 
 FFMPEG = "ffmpeg"
+executor = ThreadPoolExecutor(max_workers=3)
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
@@ -72,11 +74,10 @@ async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
         start = rand(0.0, 0.8)
 
         vf = (
-            f"scale=720:-2,"
+            f"scale=720:-2:flags=lanczos,"
             f"eq=contrast={contrast}:brightness={brightness},"
             f"hue=s={saturation}"
         )
-
         cmd = [
             FFMPEG, "-y",
             "-loglevel", "error",
@@ -87,10 +88,12 @@ async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "-vf", vf,
             "-r", "30",
 
-            "-c:v", "libx264",
-            "-preset", "veryfast",
-            "-crf", "20",
-            "-pix_fmt", "yuv420p",
+           "-c:v", "libx264",
+           "-preset", "veryfast",
+           "-crf", "18",
+           "-profile:v", "high",
+           "-level", "4.1",
+           "-pix_fmt", "yuv420p",
 
             "-c:a", "aac",
             "-b:a", "128k",
