@@ -60,6 +60,7 @@ async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await msg.reply_text("Genero 3 versioni differenti...⚡⌛")
 
     outputs = []
+    futures = []
 
     for i in range(3):
         prefix = random.choice(["IMG", "VID", "DSC"])
@@ -82,11 +83,12 @@ async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
             FFMPEG, "-y",
             "-loglevel", "error",
 
-            "-i", input_path,
             "-ss", str(start),
+            "-i", input_path,
 
             "-vf", vf,
             "-r", "30",
+            "-threads", "0",
 
            "-c:v", "libx264",
            "-preset", "veryfast",
@@ -102,14 +104,20 @@ async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
             out
         ]
         print("START", i)
-        ok = run_cmd(cmd)
-        print("END", i, ok)
-        if ok:
-            outputs.append(out)
-        else:
-            print("Qualcosa è andato storto, Riprova")
+        futures.append((executor.submit(run_cmd, cmd), out))
+        
+        # (fine del for i in range(3))
 
-            # INVIO VIDEO
+        for future, out in futures:
+            ok = future.result()
+            print("DONE:", out, ok)
+
+            if ok:
+                outputs.append(out)
+            else:
+                print("Errore generazione:", out)
+                
+    # INVIO VIDEO
     for out in outputs:
         try:
             with open(out, "rb") as f:
